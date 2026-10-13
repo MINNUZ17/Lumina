@@ -966,7 +966,7 @@
             }
 
             try {
-                const res = await fetch(`http://127.0.0.1:5000/geocode?place=${encodeURIComponent(query)}`);
+                const res = await fetch(`https://lumina-r7xz.onrender.com/geocode?place=${encodeURIComponent(query)}`);
                 const data = await res.json();
                 box.innerHTML = "";
                 if (data.error || !data.length) {
@@ -1004,7 +1004,7 @@
 
         /* ===================== ROUTING ===================== */
         async function getCoordinates(place) {
-            const res = await fetch(`http://127.0.0.1:5000/geocode?place=${encodeURIComponent(place)}`);
+            const res = await fetch(`https://lumina-r7xz.onrender.com/geocode?place=${encodeURIComponent(place)}`);
             const data = await res.json();
             if (data.error || !data.length) {
                 document.getElementById("routeCount").innerHTML = `<span style="color:#ef4444; font-size:15px; font-weight:700; display:block; margin:8px 0;">📍 "${place}" not found. Try a different search.</span>`;
@@ -1029,7 +1029,7 @@
             if (!startCoords || !endCoords) return false;
 
             const res = await fetch(
-                `http://127.0.0.1:5000/routes?start=${startCoords.lat},${startCoords.lon}&end=${endCoords.lat},${endCoords.lon}`
+                `https://lumina-r7xz.onrender.com/routes?start=${startCoords.lat},${startCoords.lon}&end=${endCoords.lat},${endCoords.lon}`
             );
             const data = await res.json();
             if (data.error) {
@@ -1122,7 +1122,7 @@
 
         async function fetchReviewStats(routeKey) {
             try {
-                const res = await fetch(`http://127.0.0.1:5000/review_stats?route_key=${encodeURIComponent(routeKey)}`);
+                const res = await fetch(`https://lumina-r7xz.onrender.com/review_stats?route_key=${encodeURIComponent(routeKey)}`);
                 const data = await res.json();
 
                 const container = document.getElementById("routeReviewStatsContainer");
@@ -1378,7 +1378,7 @@
                 return;
             }
             try {
-                const res = await fetch("http://127.0.0.1:5000/review", {
+                const res = await fetch("https://lumina-r7xz.onrender.com/review", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ email, rating: currentRating, comment, route_key })
