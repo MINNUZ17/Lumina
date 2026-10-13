@@ -1,0 +1,234 @@
+[
+    {
+        "rating": 3,
+        "comment": "yeah kinda good",
+        "route_key": "Thoppumpady, Kochi, Ernakulam, Kerala, 682005, India|Fort Kochi, Kochi, Ernakulam, Kerala, 682001, India",
+        "timestamp": "2026-03-09T10:30:49.508712"
+    },
+    {
+        "rating": 3,
+        "comment": "route is good",
+        "route_key": "Vyttila, Ernakulam, Kanayannur, Ernakulam, Kerala, 682019, India|Toc H Institute Of Science And Technology, COLLEGE ROAD, Arakkunnam, Kanayannur, Ernakulam, Kerala, 682313, India",
+        "timestamp": "2026-03-09T10:37:50.818303"
+    },
+    {
+        "rating": 1,
+        "comment": "not a good route\n",
+        "route_key": "Vyttila, Ernakulam, Kanayannur, Ernakulam, Kerala, India|Toc H Institute Of Science And Technology, COLLEGE ROAD, Arakkunnam, Kanayannur, Ernakulam, Kerala, 682313, India",
+        "category": "Complaint",
+        "timestamp": "2026-03-09T11:37:42.447531"
+    },
+    {
+        "rating": 5,
+        "comment": "very good route",
+        "route_key": "Thoppumpady, Kochi, Ernakulam, Kerala, 682005, India|Toc H Institute Of Science And Technology, COLLEGE ROAD, Arakkunnam, Kanayannur, Ernakulam, Kerala, 682313, India",
+        "category": "Good Review",
+        "timestamp": "2026-03-09T11:51:24.725874"
+    },
+    {
+        "rating": 3,
+        "comment": "route is okay",
+        "route_key": "Vyttila, Ernakulam, Kanayannur, Ernakulam, Kerala, 682019, India|Fort Kochi, Kochi, Ernakulam, Kerala, 682001, India",
+        "category": "Good Review",
+        "timestamp": "2026-03-09T11:55:26.314542"
+    },
+    {
+        "rating": 1,
+        "comment": "i had a bad experience in this route",
+        "route_key": "cherai|Pallipuram, Kochi, Ernakulam, Kerala, 683515, India",
+        "category": "Complaint",
+        "timestamp": "2026-03-09T11:59:08.515130"
+    },
+    {
+        "rating": 2,
+        "comment": "good route",
+        "route_key": "cherai|Panampilly Nagar, Ernakulam, Kanayannur, Ernakulam, Kerala, 682036, India",
+        "category": "Good Review",
+        "timestamp": "2026-03-09T12:18:56.875420"
+    },
+    {
+        "rating": 1,
+        "comment": "route was not good",
+        "route_key": "cherai|Panampilly Nagar, Ernakulam, Kanayannur, Ernakulam, Kerala, 682036, India",
+        "category": "Complaint",
+        "timestamp": "2026-03-09T12:26:32.706336"
+    },
+    {
+        "email": "1gsghd@gmail.com",
+        "rating": 3,
+        "comment": "its good route",
+        "route_key": "Kakkanad, Ernakulam, Kanayannur, Ernakulam, Kerala, 682030, India|Kolenchery, Kunnathunad, Ernakulam, Kerala, 682311, India",
+        "category": "Good Review",
+        "timestamp": "2026-03-09T15:13:17.001126"
+    },
+    {
+        "email": "aiswaryapsunil@gmail.com",
+        "is_verified": false,
+        "rating": 1,
+        "comment": "bad experience",
+        "route_key": "",
+        "category": "Complaint",
+        "timestamp": "2026-03-09T21:56:15.671874"
+    },
+    {
+        "email": "23456@gmail.com",
+        "is_verified": false,
+        "rating": 3,
+        "comment": "i had bad experience. ",
+        "route_key": "Kochi, Ernakulam, Kerala, India|Kalady, Aluva, Ernakulam, Kerala, 683550, India",
+        "category": "Complaint",
+        "timestamp": "2026-03-09T22:05:24.065673"
+    },
+    {
+        "email": "niya123@gmail.com",
+        "rating": 3,
+        "comment": "good",
+        "route_key": "Cherai, Kochi, Ernakulam, Kerala, 683514, India|panampilly nagar",
+        "category": "Good Review",
+        "timestamp": "2026-03-09T22:53:05.713403"
+    },
+    {
+        "email": "lana123@gmail.com",
+        "rating": 3,
+        "comment": "good experiance",
+        "route_key": "Cherai, Kochi, Ernakulam, Kerala, 683514, India|Panampilly Nagar, Ernakulam, Kanayannur, Ernakulam, Kerala, 682036, India",
+        "category": "Good Review",
+        "timestamp": "2026-03-09T23:14:34.176256"
+    },
+    {
+        "email": "asdf@gmailom",
+        "rating": 3,
+        "comment": "good experiance",
+        "route_key": "Thripunithura Road, Padivattom, Ernakulam, Kanayannur, Ernakulam, Kerala, 682024, India|Vyttila, Ernakulam, Kanayannur, Ernakulam, Kerala, India",
+        "category": "Good Review",
+        "timestamp": "2026-03-10T11:46:05.357194"
+    },
+    {
+        "email": "123@gmail.com",
+        "rating": 4,
+        "comment": "route was good",
+        "route_key": "Vyttila, Ernakulam, Kanayannur, Ernakulam, Kerala, India|Toc H Institute Of Science And Technology, COLLEGE ROAD, Arakkunnam, Kanayannur, Ernakulam, Kerala, 682313, India|safest",
+        "category": "Good Review",
+        "timestamp": "2026-03-16T21:14:43.400907"
+    },
+    {
+        "email": "test@test.com",
+        "rating": 5,
+        "comment": "great",
+        "route_key": "dummy",
+        "category": "Good Review",
+        "timestamp": "2026-03-16T21:28:25.855527"
+    },
+    {
+        "email": "12345@gmail.com",
+        "rating": 3,
+        "comment": "good",
+        "route_key": "Vyttila, Ernakulam, Kanayannur, Ernakulam, Kerala, India|Toc H Institute Of Science And Technology, COLLEGE ROAD, Arakkunnam, Kanayannur, Ernakulam, Kerala, 682313, India|safest",
+        "category": "Good Review",
+        "timestamp": "2026-03-16T21:43:41.915943"
+    },
+    {
+        "email": "test@example.com",
+        "rating": 5,
+        "comment": "Excellent service!",
+        "route_key": "Test Route|fastest",
+        "category": "Good Review",
+        "timestamp": "2026-03-28T15:01:59.818006"
+    },
+    {
+        "email": "12345@gmail.com",
+        "rating": 3,
+        "comment": "good route",
+        "route_key": "Cherai, Kochi, Ernakulam, Kerala, 683514, India|Panampilly Nagar, Ernakulam, Kanayannur, Ernakulam, Kerala, 682036, India|safest",
+        "category": "Good Review",
+        "timestamp": "2026-03-28T15:27:57.426978"
+    },
+    {
+        "email": "12345@gmail.com",
+        "rating": 3,
+        "comment": "good route",
+        "route_key": "|",
+        "category": "Good Review",
+        "timestamp": "2026-03-28T15:28:57.380569"
+    },
+    {
+        "email": "4579@gmail.com",
+        "rating": 4,
+        "comment": "good experiance",
+        "route_key": "Cherai, Kochi, Ernakulam, Kerala, 683514, India|Panampilly Nagar, Ernakulam, Kanayannur, Ernakulam, Kerala, 682036, India|safest",
+        "category": "Good Review",
+        "timestamp": "2026-03-28T15:33:45.259663"
+    },
+    {
+        "email": "geethu@gmail.com",
+        "rating": 4,
+        "comment": "good experiance",
+        "route_key": "Vyttila, Ernakulam, Kanayannur, Ernakulam, Kerala, 682019, India|Toc H Institute Of Science And Technology, COLLEGE ROAD, Arakkunnam, Kanayannur, Ernakulam, Kerala, 682313, India|safest",
+        "category": "Good Review",
+        "timestamp": "2026-03-28T15:38:42.338625"
+    },
+    {
+        "email": "geethu@gmail.com",
+        "rating": 4,
+        "comment": "good experience",
+        "route_key": "|",
+        "category": "Good Review",
+        "timestamp": "2026-03-28T15:39:36.018373"
+    },
+    {
+        "email": "niya123@gmail.com",
+        "rating": 4,
+        "comment": "good experiance",
+        "route_key": "|",
+        "category": "Good Review",
+        "timestamp": "2026-03-28T15:40:19.037989"
+    },
+    {
+        "email": "niya123@gmail.com",
+        "rating": 4,
+        "comment": "good experiance",
+        "route_key": "|",
+        "category": "Good Review",
+        "timestamp": "2026-03-28T15:43:50.067300"
+    },
+    {
+        "email": "niya123@gmail.com",
+        "rating": 4,
+        "comment": "good experiance",
+        "route_key": "|",
+        "category": "Good Review",
+        "timestamp": "2026-03-28T15:47:26.796618"
+    },
+    {
+        "email": "niya123@gmail.com",
+        "rating": 4,
+        "comment": "good experience",
+        "route_key": "|",
+        "category": "Good Review",
+        "timestamp": "2026-03-28T15:47:58.663174"
+    },
+    {
+        "email": "niya123@gmail.com",
+        "rating": 4,
+        "comment": "good experience",
+        "route_key": "|",
+        "category": "Good Review",
+        "timestamp": "2026-03-28T15:49:57.895939"
+    },
+    {
+        "email": "niya123@gmail.com",
+        "rating": 4,
+        "comment": "good experience",
+        "route_key": "Vyttila, Ernakulam, Kanayannur, Ernakulam, Kerala, 682019, India|Toc H Institute Of Science And Technology, COLLEGE ROAD, Arakkunnam, Kanayannur, Ernakulam, Kerala, 682313, India|safest",
+        "category": "Good Review",
+        "timestamp": "2026-03-28T15:54:03.077012"
+    },
+    {
+        "email": "niya123@gmail.com",
+        "rating": 3,
+        "comment": "good experience",
+        "route_key": "|",
+        "category": "Good Review",
+        "timestamp": "2026-03-28T15:54:58.164525"
+    }
+]

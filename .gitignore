@@ -1,0 +1,7 @@
+.venv/
+lumina_env/
+__pycache__/
+*.py[cod]
+.env
+
+backend/cache/

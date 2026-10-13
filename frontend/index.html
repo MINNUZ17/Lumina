@@ -1,0 +1,1420 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Lumina: Ernakulam Smart Drive</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+    <style>
+        :root {
+            /* Dark Theme (Default) */
+            --bg-body: #0b1220;
+            --bg-sidebar: #0f172a;
+            --bg-input: #111827;
+            --bg-panel: #1e293b;
+            --bg-btn-review: rgba(255, 255, 255, 0.05);
+            --text-main: #e5e7eb;
+            --text-title: #ffffff;
+            --text-muted: #94a3b8;
+            --text-sub: #64748b;
+            --border: rgba(255, 255, 255, 0.08);
+            --suggestion-hover: #334155;
+            --shadow: rgba(0, 0, 0, 0.5);
+        }
+
+        [data-theme="light"] {
+            --bg-body: #f8fafc;
+            --bg-sidebar: #ffffff;
+            --bg-input: #e2e8f0;
+            --bg-panel: #f1f5f9;
+            --bg-btn-review: #cbd5e1;
+            --text-main: #334155;
+            --text-title: #0f172a;
+            --text-muted: #64748b;
+            --text-sub: #94a3b8;
+            --border: rgba(0, 0, 0, 0.08);
+            --suggestion-hover: #e2e8f0;
+            --shadow: rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: var(--bg-body);
+            color: var(--text-main);
+            overflow: hidden;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .app-container {
+            display: flex;
+            height: 100vh;
+            width: 100%;
+        }
+
+        /* ===================== SIDEBAR ===================== */
+        .sidebar {
+            width: 380px;
+            min-width: 380px;
+            background: var(--bg-sidebar);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            z-index: 2000;
+            padding: 24px;
+            box-sizing: border-box;
+            overflow-y: auto;
+            transition: background 0.3s, border-color 0.3s;
+        }
+
+        .title {
+            font-weight: 800;
+            font-size: 24px;
+            margin-bottom: 32px;
+            letter-spacing: -0.025em;
+            color: var(--text-title);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .theme-toggle {
+            cursor: pointer;
+            font-size: 18px;
+            background: var(--bg-btn-review);
+            padding: 8px;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--border);
+            transition: all 0.2s;
+            color: var(--text-muted);
+        }
+
+        .theme-toggle:hover {
+            background: var(--bg-panel);
+            color: var(--text-title);
+        }
+
+        .input-section {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        label {
+            display: block;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 6px;
+            letter-spacing: 0.05em;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: var(--bg-input);
+            color: var(--text-main);
+            outline: none;
+            font-size: 14px;
+            box-sizing: border-box;
+            transition: all 0.2s;
+        }
+
+        input:focus {
+            border-color: #3b82f6;
+        }
+
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .main-btns {
+            display: flex;
+            gap: 12px;
+        }
+
+        button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        #fastestBtn {
+            background: #2563eb;
+            color: white;
+        }
+
+        #safestBtn {
+            background: #16a34a;
+            color: white;
+        }
+
+        #reviewBtn {
+            background: var(--bg-btn-review);
+            color: var(--text-muted);
+            border: 1px solid var(--border);
+            margin-top: 12px;
+        }
+
+        #reviewBtn:hover {
+            background: var(--bg-panel);
+            color: var(--text-title);
+        }
+
+        /* ===================== STATS ===================== */
+        .stats-panel {
+            margin-top: 24px;
+            background: var(--bg-panel);
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            transition: background 0.3s;
+        }
+
+        .stat {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .stat span {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text-title);
+        }
+
+        .route-info {
+            font-size: 11px;
+            color: var(--text-sub);
+            text-align: center;
+            margin-top: 12px;
+        }
+
+        /* ===================== REVIEW STATS & FEED ===================== */
+        .review-stats-container {
+            margin-top: 16px;
+            display: none;
+            /* Hidden by default if no reviews */
+            flex-direction: column;
+            gap: 12px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .youtube-pill {
+            display: flex;
+            align-items: center;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 4px 12px;
+            width: fit-content;
+            gap: 8px;
+            font-size: 13px;
+            color: var(--text-main);
+        }
+
+        .pill-divider {
+            width: 1px;
+            height: 16px;
+            background: var(--border);
+        }
+
+        .pill-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: default;
+        }
+
+        .pill-item span {
+            font-weight: 700;
+        }
+
+        .review-feed {
+            max-height: 250px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding-right: 8px;
+            scrollbar-width: thin;
+            scrollbar-color: var(--border) transparent;
+        }
+
+        .review-feed::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .review-feed::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 4px;
+        }
+
+        .review-card {
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .review-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .review-card-stars {
+            color: #f59e0b;
+            letter-spacing: 1px;
+        }
+
+        .review-card-comment {
+            font-size: 13px;
+            color: var(--text-main);
+            line-height: 1.4;
+        }
+
+        .review-card-info {
+            font-size: 10px;
+            color: var(--text-sub);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+
+        /* ===================== MAP ===================== */
+        #map {
+            flex: 1;
+            height: 100%;
+        }
+
+        /* ===================== SUGGESTIONS ===================== */
+        .suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: var(--bg-panel);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 5000;
+            box-shadow: 0 10px 15px -3px var(--shadow);
+            margin-top: 4px;
+        }
+
+        .suggestions div {
+            padding: 10px 16px;
+            cursor: pointer;
+            font-size: 13px;
+            color: var(--text-main);
+            transition: background 0.2s;
+        }
+
+        .suggestions div:hover {
+            background: var(--suggestion-hover);
+        }
+
+        /* ===================== REVIEW MODAL ===================== */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 6000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(4px);
+            transition: opacity 0.5s;
+            opacity: 1;
+        }
+
+        .modal-overlay.hidden {
+            opacity: 0;
+        }
+
+        .modal {
+            background: var(--bg-sidebar);
+            width: 400px;
+            padding: 32px;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            box-shadow: 0 20px 25px -5px var(--shadow);
+        }
+
+        .modal h2 {
+            margin: 0;
+            font-size: 20px;
+            color: var(--text-title);
+        }
+
+        .rating-stars {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .star {
+            color: var(--text-sub);
+            transition: color 0.2s;
+        }
+
+        .star.active {
+            color: #f59e0b;
+        }
+
+        textarea {
+            width: 100%;
+            height: 100px;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px;
+            color: var(--text-main);
+            font-family: inherit;
+            resize: none;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        textarea:focus {
+            border-color: #3b82f6;
+        }
+
+        .modal-btns {
+            display: flex;
+            gap: 12px;
+        }
+
+        #submitReview {
+            background: #2563eb;
+            color: white;
+        }
+
+        #submitReview:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        #cancelReview {
+            background: transparent;
+            color: #94a3b8;
+        }
+
+        .modal-message {
+            font-size: 13px;
+            text-align: center;
+            padding: 10px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .modal-message.success {
+            background: rgba(22, 163, 74, 0.1);
+            color: #4ade80;
+            display: block;
+        }
+
+        .modal-message.error {
+            background: rgba(220, 38, 38, 0.1);
+            color: #f87171;
+            display: block;
+        }
+
+        /* ===================== MAP SCROLLBAR ===================== */
+        .map-wrapper {
+            flex: 1;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            /* Changed to column to allow horizontal scroll below map */
+        }
+
+        .map-main-area {
+            flex: 1;
+            display: flex;
+            min-height: 0;
+        }
+
+        #map {
+            flex: 1;
+            height: 100%;
+        }
+
+        /* Scrollbars */
+        .map-scroll-container {
+            background: var(--bg-sidebar);
+            border-left: 1px solid var(--border);
+            position: relative;
+            display: flex;
+            z-index: 1000;
+        }
+
+        .map-scroll-container.vertical {
+            width: 20px;
+            flex-direction: column;
+        }
+
+        .map-scroll-container.horizontal {
+            height: 20px;
+            border-left: none;
+            border-top: 1px solid var(--border);
+            width: 100%;
+        }
+
+        .map-scrollbar-track {
+            flex: 1;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .map-scrollbar-handle {
+            position: absolute;
+            background: #3b82f6;
+            border-radius: 10px;
+            cursor: grab;
+            transition: background 0.2s;
+        }
+
+        .map-scrollbar-handle.vertical {
+            left: 2px;
+            right: 2px;
+            height: 60px;
+        }
+
+        .map-scrollbar-handle.horizontal {
+            top: 2px;
+            bottom: 2px;
+            width: 60px;
+        }
+
+        .map-scrollbar-handle:active {
+            cursor: grabbing;
+            background: #2563eb;
+        }
+
+        /* Layer Switcher */
+        .layer-switcher {
+            position: absolute;
+            top: 10px;
+            right: 40px;
+            /* Offset from vertical scrollbar */
+            z-index: 1100;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .layer-btn {
+            width: 36px;
+            height: 36px;
+            background: var(--bg-sidebar);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 10px var(--shadow);
+            transition: all 0.2s;
+            color: var(--text-muted);
+            font-size: 18px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .layer-btn:hover {
+            background: var(--bg-panel);
+            color: var(--text-title);
+            transform: scale(1.1);
+        }
+
+        .layer-btn.active {
+            border-color: #3b82f6;
+            background: #2563eb;
+            color: white;
+        }
+
+        .layer-tooltip {
+            position: absolute;
+            right: 46px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s;
+            white-space: nowrap;
+        }
+
+        .layer-btn:hover .layer-tooltip {
+            opacity: 1;
+        }
+
+        .map-scroll-btn {
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 10px;
+            color: var(--text-muted);
+            transition: all 0.2s;
+            user-select: none;
+            background: var(--bg-sidebar);
+        }
+
+        .map-scroll-btn:hover {
+            background: var(--bg-panel);
+            color: var(--text-title);
+        }
+
+        .map-scroll-container.horizontal .map-scroll-btn {
+            width: 20px;
+            height: 20px;
+            border-right: 1px solid var(--border);
+        }
+
+        .map-scroll-container.horizontal .map-scroll-btn:last-child {
+            border-right: none;
+            border-left: 1px solid var(--border);
+        }
+
+        .map-scroll-container.vertical .map-scroll-btn:first-child {
+            border-bottom: 1px solid var(--border);
+        }
+
+        .map-scroll-container.vertical .map-scroll-btn:last-child {
+            border-top: 1px solid var(--border);
+        }
+
+        /* ===================== SPLASH SCREEN ===================== */
+        #splashScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0b1220;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            transition: opacity 1s ease-in-out, visibility 1s;
+        }
+
+        #splashScreen.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .splash-content {
+            text-align: center;
+            animation: fadeInScale 1.5s ease-out forwards;
+        }
+
+        .splash-title {
+            font-size: 80px;
+            font-weight: 900;
+            color: white;
+            letter-spacing: 0.2em;
+            text-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+            margin: 0;
+            text-transform: uppercase;
+        }
+
+        .splash-subtitle {
+            font-size: 14px;
+            color: #94a3b8;
+            margin-top: 10px;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            opacity: 0.8;
+        }
+
+        @keyframes fadeInScale {
+            0% {
+                opacity: 0;
+                transform: scale(0.9);
+                letter-spacing: 0.5em;
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1);
+                letter-spacing: 0.2em;
+            }
+        }
+
+        @media (max-width: 800px) {
+            .app-container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                min-width: 100%;
+                height: auto;
+            }
+
+            .map-wrapper {
+                height: calc(100vh - 400px);
+            }
+
+            .map-scroll-container {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="splashScreen">
+        <div class="splash-content">
+            <h1 class="splash-title">LUMINA</h1>
+            <div class="splash-subtitle">Safety-Score Based Navigation System</div>
+        </div>
+    </div>
+
+    <div class="app-container">
+        <div class="sidebar">
+            <div class="title">
+                LUMINA
+                <div class="theme-toggle" id="themeToggle" title="Toggle Light/Dark Mode">
+                    <span id="themeIcon">🌙</span>
+                </div>
+            </div>
+
+            <div class="input-section">
+                <div class="input-group">
+                    <label>Starting Point</label>
+                    <input type="text" id="start" placeholder="Search location...">
+                    <div id="startSuggestions" class="suggestions" style="display:none;"></div>
+                </div>
+
+                <div class="input-group">
+                    <label>Destination</label>
+                    <input type="text" id="end" placeholder="Search destination...">
+                    <div id="endSuggestions" class="suggestions" style="display:none;"></div>
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <div class="main-btns">
+                    <button id="fastestBtn">Fastest</button>
+                    <button id="safestBtn">Safest</button>
+                </div>
+                <button id="reviewBtn">Give Feedback</button>
+            </div>
+
+            <div class="stats-panel">
+                <div class="stat">DISTANCE <span id="distanceStat">--</span></div>
+                <div class="stat">TRAVEL TIME <span id="timeStat">--</span></div>
+                <div class="stat">SAFETY SCORE <span id="safetyStat">--</span></div>
+
+                <div class="review-stats-container" id="routeReviewStatsContainer">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div class="youtube-pill">
+                            <div class="pill-item" title="Good Reviews">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"
+                                    style="opacity: 0.8;">
+                                    <path
+                                        d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z" />
+                                </svg>
+                                <span id="thumbsUpStat">0</span>
+                            </div>
+                            <div class="pill-divider"></div>
+                            <div class="pill-item" title="Complaints">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"
+                                    style="opacity: 0.8; transform: scaleY(-1);">
+                                    <path
+                                        d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z" />
+                                </svg>
+                                <span id="thumbsDownStat">0</span>
+                            </div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div id="starVisual" style="color: #f59e0b; font-size: 14px;"></div>
+                            <div id="starRatingStat"
+                                style="font-size: 10px; font-weight: 800; color: var(--text-muted);">0.0</div>
+                        </div>
+                    </div>
+
+                    <div class="review-feed" id="routeReviewFeed">
+                        <!-- Reviews will be injected here -->
+                    </div>
+                </div>
+            </div>
+
+            <div id="routeCount" class="route-info">Ready to analyze routes</div>
+        </div>
+
+        <div class="map-wrapper">
+            <div class="map-main-area">
+                <div id="map">
+                    <div class="layer-switcher">
+                        <div class="layer-btn active" id="layerDefault" onclick="switchLayer('default')">
+                            <span>🗺️</span>
+                            <div class="layer-tooltip">Standard</div>
+                        </div>
+                        <div class="layer-btn" id="layerSatellite" onclick="switchLayer('satellite')">
+                            <span>🛰️</span>
+                            <div class="layer-tooltip">Satellite</div>
+                        </div>
+                        <div class="layer-btn" id="layerTerrain" onclick="switchLayer('terrain')">
+                            <span>🏔️</span>
+                            <div class="layer-tooltip">Terrain</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="map-scroll-container vertical">
+                    <div class="map-scroll-btn" id="vScrollUp">▲</div>
+                    <div class="map-scrollbar-track" id="vScrollTrack">
+                        <div class="map-scrollbar-handle vertical" id="vScrollHandle"></div>
+                    </div>
+                    <div class="map-scroll-btn" id="vScrollDown">▼</div>
+                </div>
+            </div>
+            <div class="map-scroll-container horizontal">
+                <div class="map-scroll-btn" id="hScrollLeft">◀</div>
+                <div class="map-scrollbar-track" id="hScrollTrack" style="display: flex;">
+                    <div class="map-scrollbar-handle horizontal" id="hScrollHandle"></div>
+                </div>
+                <div class="map-scroll-btn" id="hScrollRight">▶</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Review Modal -->
+    <div id="reviewModal" class="modal-overlay">
+        <div class="modal">
+            <h2>How was the trip?</h2>
+            <div class="rating-stars" id="stars">
+                <span class="star" data-value="1">★</span>
+                <span class="star" data-value="2">★</span>
+                <span class="star" data-value="3">★</span>
+                <span class="star" data-value="4">★</span>
+                <span class="star" data-value="5">★</span>
+            </div>
+            <input type="email" id="reviewEmail" placeholder="Your Email..."
+                style="margin-bottom: 12px; width: 100%; box-sizing: border-box;">
+            <textarea id="reviewText" placeholder="Any issues with the route? Let us know..."></textarea>
+            <div id="modalMsg" class="modal-message"></div>
+            <div class="modal-btns">
+                <button type="button" id="cancelReview">Cancel</button>
+                <button type="button" id="submitReview">Submit</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+    <script>
+        const map = L.map('map').setView([9.9816, 76.2999], 11);
+
+        // Layer Definitions
+        const layers = {
+            default: L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }),
+            satellite: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EBP, and the GIS User Community'
+            }),
+            terrain: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
+                attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community'
+            })
+        };
+
+        // Initialize with default layer
+        let currentLevel = 'default';
+        layers.default.addTo(map);
+
+        window.switchLayer = function (type) {
+            layers[currentLevel].remove();
+            layers[type].addTo(map);
+            currentLevel = type;
+
+            document.querySelectorAll('.layer-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('layer' + type.charAt(0).toUpperCase() + type.slice(1)).classList.add('active');
+        };
+        let routeLayer = null;
+        let startMarker = null;
+        let endMarker = null;
+        let allRoutes = [];
+        let lastSearchKey = "";
+        let activeRouteType = ""; // Track fastest vs safest
+        let currentRating = 0;
+
+        // Theme Configuration
+        const themes = {
+            dark: { icon: '🌙' },
+            light: { icon: '☀️' }
+        };
+
+        let currentTheme = localStorage.getItem('theme') || 'dark';
+
+        // Keep the map standard and visible
+        let tileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap'
+        }).addTo(map);
+
+        function setTheme(theme) {
+            currentTheme = theme;
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+            document.getElementById('themeIcon').innerText = themes[theme].icon;
+        }
+
+        // Initialize theme
+        setTheme(currentTheme);
+
+        document.getElementById('themeToggle').onclick = () => {
+            setTheme(currentTheme === 'dark' ? 'light' : 'dark');
+        };
+
+        /* ===================== HELPERS ===================== */
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        /* ===================== SEARCH ===================== */
+        async function fetchSuggestions(inputId, boxId) {
+            const input = document.getElementById(inputId);
+            const query = input.value.trim();
+            const box = document.getElementById(boxId);
+
+            if (query.length < 1) {
+                box.style.display = "none";
+                box.innerHTML = "";
+                return;
+            }
+
+            if (!box.innerHTML) {
+                box.innerHTML = "<div style='color:#94a3b8; font-style:italic; padding:10px 16px; font-size:12px;'>Searching...</div>";
+                box.style.display = "block";
+            }
+
+            try {
+                const res = await fetch(`http://127.0.0.1:5000/geocode?place=${encodeURIComponent(query)}`);
+                const data = await res.json();
+                box.innerHTML = "";
+                if (data.error || !data.length) {
+                    box.innerHTML = "<div style='color:#f87171; font-size:12px; padding:12px 16px;'>No results.</div>";
+                    box.style.display = "block";
+                    return;
+                }
+                data.forEach(place => {
+                    const div = document.createElement("div");
+                    div.innerText = place.name;
+                    div.onmousedown = (e) => {
+                        e.preventDefault();
+                        input.value = place.name;
+                        box.style.display = "none";
+                    };
+                    box.appendChild(div);
+                });
+                box.style.display = "block";
+            } catch (e) {
+                box.style.display = "none";
+            }
+        }
+
+        const debouncedSearchStart = debounce(() => fetchSuggestions("start", "startSuggestions"), 250);
+        const debouncedSearchEnd = debounce(() => fetchSuggestions("end", "endSuggestions"), 250);
+
+        document.getElementById("start").addEventListener("input", debouncedSearchStart);
+        document.getElementById("end").addEventListener("input", debouncedSearchEnd);
+
+        document.getElementById("start").onblur = () => { setTimeout(() => document.getElementById("startSuggestions").style.display = "none", 200); };
+        document.getElementById("end").onblur = () => { setTimeout(() => document.getElementById("endSuggestions").style.display = "none", 200); };
+
+        document.getElementById("start").onfocus = () => { if (document.getElementById("start").value) document.getElementById("startSuggestions").style.display = "block"; };
+        document.getElementById("end").onfocus = () => { if (document.getElementById("end").value) document.getElementById("endSuggestions").style.display = "block"; };
+
+        /* ===================== ROUTING ===================== */
+        async function getCoordinates(place) {
+            const res = await fetch(`http://127.0.0.1:5000/geocode?place=${encodeURIComponent(place)}`);
+            const data = await res.json();
+            if (data.error || !data.length) {
+                document.getElementById("routeCount").innerHTML = `<span style="color:#ef4444; font-size:15px; font-weight:700; display:block; margin:8px 0;">📍 "${place}" not found. Try a different search.</span>`;
+                return null;
+            }
+            return data[0];
+        }
+
+        async function fetchRoutes() {
+            const startPlace = document.getElementById("start").value.trim();
+            const endPlace = document.getElementById("end").value.trim();
+            if (!startPlace || !endPlace) {
+                document.getElementById("routeCount").innerHTML = `<span style="color:#ef4444; font-size:15px; font-weight:700; display:block; margin:8px 0;">⚠️ Please enter both locations.</span>`;
+                return false;
+            }
+
+            const currentSearchKey = `${startPlace}|${endPlace}`;
+            if (currentSearchKey === lastSearchKey && allRoutes.length > 0) return true;
+
+            const startCoords = await getCoordinates(startPlace);
+            const endCoords = await getCoordinates(endPlace);
+            if (!startCoords || !endCoords) return false;
+
+            const res = await fetch(
+                `http://127.0.0.1:5000/routes?start=${startCoords.lat},${startCoords.lon}&end=${endCoords.lat},${endCoords.lon}`
+            );
+            const data = await res.json();
+            if (data.error) {
+                document.getElementById("routeCount").innerHTML = `<span style="color:#ef4444; font-size:15px; font-weight:700; display:block; margin:8px 0;">❌ ${data.error}</span>`;
+                return false;
+            }
+
+            allRoutes = data.routes;
+            lastSearchKey = currentSearchKey;
+
+            const count = allRoutes.length;
+            document.getElementById("routeCount").innerText = `${count} alternative${count > 1 ? 's' : ''} found`;
+
+            return true;
+        }
+
+        function drawRoute(type) {
+            if (!allRoutes.length) return;
+            if (routeLayer) map.removeLayer(routeLayer);
+            if (startMarker) map.removeLayer(startMarker);
+            if (endMarker) map.removeLayer(endMarker);
+
+            // Definitve differentiation logic: sort mathematically
+            const sortedByTime = [...allRoutes].sort((a, b) => parseFloat(a.duration_sec) - parseFloat(b.duration_sec));
+            const sortedBySafety = [...allRoutes].sort((a, b) => parseFloat(b.safety_score) - parseFloat(a.safety_score));
+
+            const fastest = sortedByTime[0];
+            const safest = sortedBySafety[0];
+
+            const selected = type === "fastest" ? fastest : safest;
+            const isBoth = (parseFloat(fastest.safety_score) === parseFloat(safest.safety_score) &&
+                parseInt(fastest.duration_sec) === parseInt(safest.duration_sec));
+
+            routeLayer = L.geoJSON(selected.geometry, {
+                style: {
+                    color: type === "fastest" ? "#3b82f6" : "#10b981",
+                    weight: 7
+                }
+            }).addTo(map);
+
+            // Add markers for start and end
+            const coords = selected.geometry.coordinates;
+            const startPoint = [coords[0][1], coords[0][0]];
+            const endPoint = [coords[coords.length - 1][1], coords[coords.length - 1][0]];
+
+            startMarker = L.circleMarker(startPoint, {
+                radius: 8,
+                fillColor: "#10b981",
+                color: "#fff",
+                weight: 2,
+                opacity: 1,
+                fillOpacity: 1
+            }).addTo(map).bindPopup("<b>Start Point</b>");
+
+            endMarker = L.circleMarker(endPoint, {
+                radius: 8,
+                fillColor: "#ef4444",
+                color: "#fff",
+                weight: 2,
+                opacity: 1,
+                fillOpacity: 1
+            }).addTo(map).bindPopup("<b>End Point</b>");
+
+            map.fitBounds(routeLayer.getBounds(), { padding: [50, 50] });
+
+            // Update Statistics
+            document.getElementById("distanceStat").innerText = selected.distance_km + " km";
+            const mins = Math.floor(selected.duration_sec / 60);
+            const secs = selected.duration_sec % 60;
+            document.getElementById("timeStat").innerText = `${mins}m ${secs}s`;
+            document.getElementById("safetyStat").innerText = selected.safety_score + "/100";
+
+            if (isBoth) {
+                document.getElementById("safetyStat").innerHTML += ' <span style="font-size:10px; color:#10b981; background:rgba(16,185,129,0.1); padding:2px 6px; border-radius:4px; margin-left:4px;">OPTIMAL</span>';
+            }
+
+            activeRouteType = type;
+            fetchReviewStats(`${lastSearchKey}|${type}`);
+
+            // Update route count with index info for differentiation feedback
+            const count = allRoutes.length;
+            const index = (type === "fastest" ? sortedByTime : sortedBySafety).indexOf(selected) + 1;
+            document.getElementById("routeCount").innerHTML = `
+                <div style="font-weight:700; color:var(--text-title); margin-bottom:4px;">
+                    ${type === "fastest" ? '🚀 Fastest' : '🛡️ Safest'} Route Selected
+                </div>
+                ${count} alternative${count > 1 ? 's' : ''} found (showing #${index})
+            `;
+        }
+
+        async function fetchReviewStats(routeKey) {
+            try {
+                const res = await fetch(`http://127.0.0.1:5000/review_stats?route_key=${encodeURIComponent(routeKey)}`);
+                const data = await res.json();
+
+                const container = document.getElementById("routeReviewStatsContainer");
+                const feed = document.getElementById("routeReviewFeed");
+
+                if (data.total_reviews > 0) {
+                    document.getElementById("thumbsUpStat").innerText = data.thumbs_up;
+                    document.getElementById("thumbsDownStat").innerText = data.thumbs_down;
+                    document.getElementById("starRatingStat").innerText = data.average_rating + " AVG";
+
+                    const fullStars = Math.floor(data.average_rating);
+                    document.getElementById("starVisual").innerText = "★".repeat(fullStars) + "☆".repeat(5 - fullStars);
+
+                    // Render Feed
+                    feed.innerHTML = "";
+                    data.reviews.reverse().forEach(rev => {
+                        const card = document.createElement("div");
+                        card.className = "review-card";
+
+                        const date = new Date(rev.timestamp).toLocaleDateString();
+                        const stars = "★".repeat(rev.rating) + "☆".repeat(5 - rev.rating);
+
+                        card.innerHTML = `
+                            <div class="review-card-header">
+                                <span class="review-card-stars">${stars}</span>
+                                <span>${date}</span>
+                            </div>
+                            <div class="review-card-comment">${rev.comment}</div>
+                            <div class="review-card-info">
+                                <span>${rev.category || 'Feedback'}</span>
+                                ${rev.email ? `<span>${rev.email}</span>` : ''}
+                            </div>
+                        `;
+                        feed.appendChild(card);
+                    });
+
+                    container.style.display = "flex";
+                } else {
+                    container.style.display = "none";
+                }
+            } catch (e) {
+                console.error("Stats Error:", e);
+            }
+        }
+
+        async function handleRouteClick(type) {
+            const btn = type === "fastest" ? document.getElementById("fastestBtn") : document.getElementById("safestBtn");
+            const originalText = btn.innerText;
+
+            document.getElementById("distanceStat").innerText = "--";
+            document.getElementById("timeStat").innerText = "--";
+            document.getElementById("safetyStat").innerText = "--";
+
+            btn.innerText = "Analyzing...";
+            btn.disabled = true;
+            try {
+                const ok = await fetchRoutes();
+                if (ok) drawRoute(type);
+            } finally {
+                btn.innerText = originalText;
+                btn.disabled = false;
+            }
+        }
+
+        document.getElementById("fastestBtn").onclick = () => handleRouteClick("fastest");
+        document.getElementById("safestBtn").onclick = () => handleRouteClick("safest");
+
+        /* ===================== MAP SCROLL LOGIC ===================== */
+        const vTrack = document.getElementById('vScrollTrack');
+        const vHandle = document.getElementById('vScrollHandle');
+        const hTrack = document.getElementById('hScrollTrack');
+        const hHandle = document.getElementById('hScrollHandle');
+
+        // Bounds for Ernakulam (approx)
+        const RANGE = {
+            minLat: 9.75,
+            maxLat: 10.25,
+            minLon: 76.15,
+            maxLon: 76.45
+        };
+
+        let isDraggingV = false;
+        let isDraggingH = false;
+
+        function updateScrollHandles() {
+            const center = map.getCenter();
+
+            // Vertical (Latitude)
+            if (!isDraggingV) {
+                const vPercent = (RANGE.maxLat - center.lat) / (RANGE.maxLat - RANGE.minLat);
+                const vClamped = Math.max(0, Math.min(1, vPercent));
+                vHandle.style.top = (vClamped * (vTrack.offsetHeight - vHandle.offsetHeight)) + 'px';
+            }
+
+            // Horizontal (Longitude)
+            if (!isDraggingH) {
+                const hPercent = (center.lng - RANGE.minLon) / (RANGE.maxLon - RANGE.minLon);
+                const hClamped = Math.max(0, Math.min(1, hPercent));
+                hHandle.style.left = (hClamped * (hTrack.offsetWidth - hHandle.offsetWidth)) + 'px';
+            }
+        }
+
+        function scrollVertical(e) {
+            const trackH = vTrack.offsetHeight;
+            const handleH = vHandle.offsetHeight;
+            let y = e.clientY - vTrack.getBoundingClientRect().top - (handleH / 2);
+            y = Math.max(0, Math.min(trackH - handleH, y));
+            vHandle.style.top = y + 'px';
+
+            const percent = y / (trackH - handleH);
+            const targetLat = RANGE.maxLat - (percent * (RANGE.maxLat - RANGE.minLat));
+            map.panTo([targetLat, map.getCenter().lng], { animate: false });
+        }
+
+        function scrollHorizontal(e) {
+            const trackW = hTrack.offsetWidth;
+            const handleW = hHandle.offsetWidth;
+            let x = e.clientX - hTrack.getBoundingClientRect().left - (handleW / 2);
+            x = Math.max(0, Math.min(trackW - handleW, x));
+            hHandle.style.left = x + 'px';
+
+            const percent = x / (trackW - handleW);
+            const targetLon = RANGE.minLon + (percent * (RANGE.maxLon - RANGE.minLon));
+            map.panTo([map.getCenter().lat, targetLon], { animate: false });
+        }
+
+        vHandle.onmousedown = (e) => {
+            isDraggingV = true;
+            document.onmousemove = scrollVertical;
+            document.onmouseup = () => {
+                isDraggingV = false;
+                document.onmousemove = null;
+                document.onmouseup = null;
+            };
+        };
+
+        hHandle.onmousedown = (e) => {
+            isDraggingH = true;
+            document.onmousemove = scrollHorizontal;
+            document.onmouseup = () => {
+                isDraggingH = false;
+                document.onmousemove = null;
+                document.onmouseup = null;
+            };
+        };
+
+        vTrack.onclick = (e) => { if (e.target !== vHandle) scrollVertical(e); };
+        hTrack.onclick = (e) => { if (e.target !== hHandle) scrollHorizontal(e); };
+
+        /* ===================== SPLASH SCREEN LOGIC ===================== */
+        window.addEventListener('load', () => {
+            const splash = document.getElementById('splashScreen');
+
+            // Check if we just submitted feedback (to skip splash on dev-server reloads)
+            if (sessionStorage.getItem('skip_splash') === 'true') {
+                splash.style.display = 'none';
+                splash.classList.add('hidden');
+                sessionStorage.removeItem('skip_splash');
+                return;
+            }
+
+            setTimeout(() => {
+                splash.classList.add('hidden');
+                // Force display: none after 1s fade-out transition
+                setTimeout(() => { splash.style.display = 'none'; }, 1000);
+            }, 1500);
+        });
+
+        map.on('move', updateScrollHandles);
+        window.addEventListener('resize', updateScrollHandles);
+        updateScrollHandles();
+
+        // Incremental Scroll Buttons
+        const PAN_INC = 0.005; // Panning increment
+
+        document.getElementById('vScrollUp').onclick = () => {
+            map.panBy([0, -50], { animate: true });
+        };
+        document.getElementById('vScrollDown').onclick = () => {
+            map.panBy([0, 50], { animate: true });
+        };
+        document.getElementById('hScrollLeft').onclick = () => {
+            map.panBy([-50, 0], { animate: true });
+        };
+        document.getElementById('hScrollRight').onclick = () => {
+            map.panBy([50, 0], { animate: true });
+        };
+
+        /* ===================== REVIEWS ===================== */
+        const modal = document.getElementById("reviewModal");
+
+        document.getElementById("reviewBtn").onclick = () => {
+            modal.style.display = "flex";
+        };
+
+        document.getElementById("cancelReview").onclick = () => {
+            modal.style.display = "none";
+            resetModal();
+        };
+
+        document.getElementById("stars").onclick = (e) => {
+            if (e.target.classList.contains("star")) {
+                currentRating = parseInt(e.target.dataset.value);
+                Array.from(document.querySelectorAll(".star")).forEach(s => {
+                    s.classList.toggle("active", parseInt(s.dataset.value) <= currentRating);
+                });
+            }
+        };
+
+        function resetModal() {
+            currentRating = 0;
+            const reviewEmail = document.getElementById("reviewEmail");
+            reviewEmail.value = "";
+            reviewEmail.style.display = "block";
+
+            document.getElementById("reviewText").value = "";
+            const msg = document.getElementById("modalMsg");
+            msg.className = "modal-message";
+            msg.innerText = "";
+            // Reset button handler to use the original async function
+            const btn = document.getElementById("submitReview");
+            btn.innerText = "Submit";
+            btn.disabled = false;
+            btn.onclick = submitReviewHandler;
+        }
+
+        // Rename the original handler so we can re-assign it
+        const submitReviewHandler = async (e) => {
+            e.preventDefault(); // Safety first
+            const msg = document.getElementById("modalMsg");
+            const btn = document.getElementById("submitReview");
+
+            if (currentRating === 0) {
+                msg.innerText = "Please select a rating.";
+                msg.className = "modal-message error";
+                return;
+            }
+
+            btn.disabled = true;
+            msg.innerText = "Saving feedback...";
+            msg.className = "modal-message";
+            msg.style.display = "block";
+
+            const email = document.getElementById("reviewEmail").value.trim();
+            const comment = document.getElementById("reviewText").value;
+            const route_key = `${lastSearchKey}|${activeRouteType}`;
+
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!email || !emailRegex.test(email)) {
+                msg.innerText = "Please enter a valid Email ID (e.g., name@example.com).";
+                msg.className = "modal-message error";
+                btn.disabled = false;
+                return;
+            }
+            try {
+                const res = await fetch("http://127.0.0.1:5000/review", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email, rating: currentRating, comment, route_key })
+                });
+
+                if (res.ok) {
+                    msg.innerText = "⭐ Review Saved Successfully! (Click 'Close' when done)";
+                    msg.className = "modal-message success";
+
+                    // Instant update of the background stats
+                    fetchReviewStats(`${lastSearchKey}|${activeRouteType}`);
+
+                    // CHANGE BUTTON TO CLOSE - Allow manual close only
+                    btn.innerText = "Close";
+                    btn.disabled = false;
+                    btn.onclick = () => {
+                        const modalOverlay = document.getElementById('reviewModal');
+                        modalOverlay.style.display = "none";
+                        resetModal();
+                    };
+
+                    // Flag that we are returning from feedback to skip splash screen if page reloads
+                    sessionStorage.setItem('skip_splash', 'true');
+                } else {
+                    msg.innerText = "Failed to save review.";
+                    msg.className = "modal-message error";
+                    btn.disabled = false;
+                }
+            } catch (e) {
+                msg.innerText = "Network error. Try again.";
+                msg.className = "modal-message error";
+                btn.disabled = false;
+            }
+        };
+        document.getElementById("submitReview").onclick = submitReviewHandler;
+    </script>
+</body>
+
+</html>
